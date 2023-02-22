@@ -1,0 +1,1 @@
+export type CardData = {content: string; marked: boolean}
