@@ -1,15 +1,26 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useReward } from "react-rewards";
 import { initialData } from "./App.fixtures";
 import Card from "./components/Card";
 import { checkColumns } from "./helpers/checkColumns";
 import { checkDiagonal } from "./helpers/checkDiagonals";
 import { checkRows } from "./helpers/checkRow";
+import { shuffleArray } from "./helpers/shuffleArray";
 import { CardData } from "./lib/types";
 
 function App() {
   const [data, setData] = useState<Array<CardData>>(initialData);
   const { reward, isAnimating } = useReward("rewardId", "emoji", { spread: 120, elementCount: 100 , emoji: ['🎉', '🤩', '🥳', '😍'] });
+
+  useEffect(() => {
+   setData(data => {
+    const firstHalf = shuffleArray(data.slice(0,12))
+    const secondHalf = shuffleArray(data.slice(13))
+    const shuffledArray = [...firstHalf, data[12], ...secondHalf]
+
+    return shuffledArray as CardData[]
+  })
+  }, [])
 
   return (
     <section className="flex flex-col space-y-5 h-screen w-full justify-center items-center">
